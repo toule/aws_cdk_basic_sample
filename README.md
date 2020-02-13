@@ -23,6 +23,10 @@
 - EC2 (with AutoScaling)
 - ALB (Application Load Balancer)
 
+![arch](./images/arch.png)
+
+참고: EC2의 경우 az-a에 고정하여 생성하지 않았으나 가시화를 위해 위와 같이 표기 하였음
+
 
 
 ## Cloud9 설정
