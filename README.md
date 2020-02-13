@@ -1,4 +1,4 @@
-# AWS CDK(Cloud Development Kit Python Sample Test)
+# AWS CDK(Cloud Development Kit) Sample Test
 
 
 
