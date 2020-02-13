@@ -1,0 +1,285 @@
+{
+  "Resources": {
+    "myALB18A49813": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "Name": "myALB",
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "myALBSecurityGroupF245F258",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet1Subnet9086CB81B549F97F"
+          },
+          {
+            "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet2Subnet820C8D9D8CF3536F"
+          }
+        ],
+        "Type": "application"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myALB/Resource"
+      }
+    },
+    "myALBSecurityGroupF245F258": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB ServicemyALBB21F0F62",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Internet access ALB 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Network:ExportsOutputRefmyVPC0151299038646803"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myALB/SecurityGroup/Resource"
+      }
+    },
+    "myALBSecurityGrouptoServicemyASGInstanceSecurityGroup186BFF9F8064F83F9E": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "myALBSecurityGroupF245F258",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "ALB access 80 port of EC2 in Autoscaling Group",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "myASGInstanceSecurityGroup77B88BA5",
+            "GroupId"
+          ]
+        },
+        "FromPort": 80,
+        "ToPort": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myALB/SecurityGroup/to ServicemyASGInstanceSecurityGroup186BFF9F:80"
+      }
+    },
+    "myALBmy80B990410C": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "myALBmy80addTargetGroupGroup1569733D"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "myALB18A49813"
+        },
+        "Port": 80,
+        "Protocol": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myALB/my80/Resource"
+      }
+    },
+    "myALBmy80addTargetGroupGroup1569733D": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetType": "instance",
+        "VpcId": {
+          "Fn::ImportValue": "Network:ExportsOutputRefmyVPC0151299038646803"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myALB/my80/addTargetGroupGroup/Resource"
+      }
+    },
+    "myASGInstanceSecurityGroup77B88BA5": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Service/myASG/InstanceSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Access SSH port of EC2 in Autoscaling Instance",
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "ToPort": 22
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Service/myASG"
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Network:ExportsOutputRefmyVPC0151299038646803"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myASG/InstanceSecurityGroup/Resource"
+      }
+    },
+    "myASGInstanceSecurityGroupfromServicemyALBSecurityGroupDC9A0C1C800A483B8F": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "ALB access 80 port of EC2 in Autoscaling Group",
+        "FromPort": 80,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "myASGInstanceSecurityGroup77B88BA5",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "myALBSecurityGroupF245F258",
+            "GroupId"
+          ]
+        },
+        "ToPort": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myASG/InstanceSecurityGroup/from ServicemyALBSecurityGroupDC9A0C1C:80"
+      }
+    },
+    "myASGInstanceRole5AF7F92F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Service/myASG"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myASG/InstanceRole/Resource"
+      }
+    },
+    "myASGInstanceProfile053766AB": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "myASGInstanceRole5AF7F92F"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myASG/InstanceProfile"
+      }
+    },
+    "myASGLaunchConfigA0CD8C73": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": "ami-0bea7fd38fabe821a",
+        "InstanceType": "t2.micro",
+        "IamInstanceProfile": {
+          "Ref": "myASGInstanceProfile053766AB"
+        },
+        "KeyName": "keypair",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "myASGInstanceSecurityGroup77B88BA5",
+              "GroupId"
+            ]
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": "#!/bin/bash\nsudo yum update -y\nsudo amazon-linux-extras install -y nginx1.12\nsudo systemctl start nginx"
+        }
+      },
+      "DependsOn": [
+        "myASGInstanceRole5AF7F92F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Service/myASG/LaunchConfig"
+      }
+    },
+    "myASG6C9F5AC0": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "MaxSize": "2",
+        "MinSize": "1",
+        "DesiredCapacity": "1",
+        "LaunchConfigurationName": {
+          "Ref": "myASGLaunchConfigA0CD8C73"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Service/myASG"
+          }
+        ],
+        "TargetGroupARNs": [
+          {
+            "Ref": "myALBmy80addTargetGroupGroup1569733D"
+          }
+        ],
+        "VPCZoneIdentifier": [
+          {
+            "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet1Subnet9086CB81B549F97F"
+          },
+          {
+            "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet2Subnet820C8D9D8CF3536F"
+          }
+        ]
+      },
+      "UpdatePolicy": {
+        "AutoScalingScheduledAction": {
+          "IgnoreUnmodifiedGroupSizeProperties": true
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Service/myASG/ASG"
+      }
+    }
+  },
+  "Outputs": {
+    "OUTPUTALBDNS": {
+      "Value": {
+        "Fn::GetAtt": [
+          "myALB18A49813",
+          "DNSName"
+        ]
+      }
+    }
+  }
+}

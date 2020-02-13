@@ -1,0 +1,103 @@
+Metadata-Version: 1.2
+Name: sample-app
+Version: 0.0.1
+Summary: An empty CDK Python app
+Home-page: UNKNOWN
+Author: author
+Author-email: UNKNOWN
+License: UNKNOWN
+Description: AWS CDK(Cloud Development Kit) Sample Test
+        
+        Base Code: https://github.com/aws-samples/aws-cdk-examples
+        
+        
+        
+        ## 가정 사항
+        
+        - Infrastructure as code에 대한 기본적인 지식을 가지고 있음
+        - 리전 : Seoul (ap-northeast-2)
+        - 환경: Cloud9
+        
+        
+        
+        ## Cloud9 설정
+        
+        ### IDE Name
+        
+        ![ide-name](./images/cloud9-setup.png)
+        
+        ### Env Setup (나머지는 Default)
+        
+        ![ide-env](./images/cloud9-env.png)
+        
+        
+        
+        ### 동작 확인
+        
+        ![ide-init](./images/cloud9-init.png)
+        
+        
+        
+        ## IAM Role
+        
+        ### Create an IAM ROLE (For Cloud9)
+        
+        ![ide-role](./images/IAM-role.png)
+        ### Attach the IAM ROLE
+        
+        ![attach-role](./images/attach-iam-1.png)
+        
+        ![attach-role](./images/attach-iam-2.png)
+        
+        ### Disable Managed temporary credential
+        
+        #### Setting(톱니바퀴) -> AWS Setting -> AWS managed temporary credentials (OFF)
+        
+        ![disabled](./images/disable-credential.png)
+        
+        ### Set Own Profile (Cloud9 터미널 창에서 수행)
+        
+        #### install jq(JSON Proceesor)
+        
+        `sudo yum install -y jq`
+        
+        #### remove any existing credential file
+        
+        `rm -vf ${HOME}/.aws/credentials`
+        
+        #### setting ID and REGION
+        
+        `export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)`
+        `export AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')`
+        
+        #### check
+        
+        `test -n "$AWS_REGION" && echo AWS_REGION is "$AWS_REGION" || echo AWS_REGION is not set`
+        
+        #### save bash_profile
+        
+        `echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile`
+        `echo "export AWS_REGION=${AWS_REGION}" | tee -a ~/.bash_profile`
+        `aws configure set default.region ${AWS_REGION}`
+        `aws configure get default.region`
+        
+        #### validation
+        
+        `aws sts get-caller-identity`
+        
+        ![valid](./images/validation.png)
+        
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: JavaScript
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Software Development :: Code Generators
+Classifier: Topic :: Utilities
+Classifier: Typing :: Typed
+Requires-Python: >=3.6

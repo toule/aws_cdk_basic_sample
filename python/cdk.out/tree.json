@@ -1,0 +1,854 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree"
+      },
+      "Network": {
+        "id": "Network",
+        "path": "Network",
+        "children": {
+          "myVPC": {
+            "id": "myVPC",
+            "path": "Network/myVPC",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Network/myVPC/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
+                  "aws:cdk:cloudformation:props": {
+                    "cidrBlock": "10.10.0.0/16",
+                    "enableDnsHostnames": true,
+                    "enableDnsSupport": true,
+                    "instanceTenancy": "default",
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "Network/myVPC"
+                      }
+                    ]
+                  }
+                }
+              },
+              "PublicSubnet1": {
+                "id": "PublicSubnet1",
+                "path": "Network/myVPC/PublicSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "Network/myVPC/PublicSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.10.0.0/24",
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "availabilityZone": "ap-northeast-2a",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet1"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "Network/myVPC/PublicSubnet1/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "Network/myVPC/PublicSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "Network/myVPC/PublicSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPublicSubnet1RouteTable0F53E029"
+                        },
+                        "subnetId": {
+                          "Ref": "myVPCPublicSubnet1Subnet9086CB81"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "Network/myVPC/PublicSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPublicSubnet1RouteTable0F53E029"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "myVPCIGW5063090B"
+                        }
+                      }
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "Network/myVPC/PublicSubnet1/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "Network/myVPC/PublicSubnet1/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "myVPCPublicSubnet1EIP81916D1B",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "myVPCPublicSubnet1Subnet9086CB81"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "PublicSubnet2": {
+                "id": "PublicSubnet2",
+                "path": "Network/myVPC/PublicSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "Network/myVPC/PublicSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.10.1.0/24",
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "availabilityZone": "ap-northeast-2b",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet2"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "Network/myVPC/PublicSubnet2/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "Network/myVPC/PublicSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "Network/myVPC/PublicSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPublicSubnet2RouteTable50C128BC"
+                        },
+                        "subnetId": {
+                          "Ref": "myVPCPublicSubnet2Subnet820C8D9D"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "Network/myVPC/PublicSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPublicSubnet2RouteTable50C128BC"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "myVPCIGW5063090B"
+                        }
+                      }
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "Network/myVPC/PublicSubnet2/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "Network/myVPC/PublicSubnet2/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "myVPCPublicSubnet2EIPA27600C0",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "myVPCPublicSubnet2Subnet820C8D9D"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "PrivateSubnet1": {
+                "id": "PrivateSubnet1",
+                "path": "Network/myVPC/PrivateSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "Network/myVPC/PrivateSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.10.2.0/24",
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "availabilityZone": "ap-northeast-2a",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PrivateSubnet1"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "Network/myVPC/PrivateSubnet1/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "Network/myVPC/PrivateSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PrivateSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "Network/myVPC/PrivateSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPrivateSubnet1RouteTable70DB7416"
+                        },
+                        "subnetId": {
+                          "Ref": "myVPCPrivateSubnet1SubnetF3CEBB38"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "Network/myVPC/PrivateSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPrivateSubnet1RouteTable70DB7416"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "myVPCPublicSubnet1NATGateway55A6651E"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "PrivateSubnet2": {
+                "id": "PrivateSubnet2",
+                "path": "Network/myVPC/PrivateSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "Network/myVPC/PrivateSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.10.3.0/24",
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "availabilityZone": "ap-northeast-2b",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PrivateSubnet2"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "Network/myVPC/PrivateSubnet2/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "Network/myVPC/PrivateSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "myVPC01512990"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Network/myVPC/PrivateSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "Network/myVPC/PrivateSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPrivateSubnet2RouteTable68A045CD"
+                        },
+                        "subnetId": {
+                          "Ref": "myVPCPrivateSubnet2Subnet2A8990C3"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "Network/myVPC/PrivateSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "myVPCPrivateSubnet2RouteTable68A045CD"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "myVPCPublicSubnet2NATGateway78AF2502"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "IGW": {
+                "id": "IGW",
+                "path": "Network/myVPC/IGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
+                  "aws:cdk:cloudformation:props": {
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "Network/myVPC"
+                      }
+                    ]
+                  }
+                }
+              },
+              "VPCGW": {
+                "id": "VPCGW",
+                "path": "Network/myVPC/VPCGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
+                  "aws:cdk:cloudformation:props": {
+                    "vpcId": {
+                      "Ref": "myVPC01512990"
+                    },
+                    "internetGatewayId": {
+                      "Ref": "myVPCIGW5063090B"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Output": {
+            "id": "Output",
+            "path": "Network/Output"
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "Network/Exports",
+            "children": {
+              "Output{\"Ref\":\"myVPCPublicSubnet1Subnet9086CB81\"}": {
+                "id": "Output{\"Ref\":\"myVPCPublicSubnet1Subnet9086CB81\"}",
+                "path": "Network/Exports/Output{\"Ref\":\"myVPCPublicSubnet1Subnet9086CB81\"}"
+              },
+              "Output{\"Ref\":\"myVPCPublicSubnet2Subnet820C8D9D\"}": {
+                "id": "Output{\"Ref\":\"myVPCPublicSubnet2Subnet820C8D9D\"}",
+                "path": "Network/Exports/Output{\"Ref\":\"myVPCPublicSubnet2Subnet820C8D9D\"}"
+              },
+              "Output{\"Ref\":\"myVPC01512990\"}": {
+                "id": "Output{\"Ref\":\"myVPC01512990\"}",
+                "path": "Network/Exports/Output{\"Ref\":\"myVPC01512990\"}"
+              }
+            }
+          }
+        }
+      },
+      "Service": {
+        "id": "Service",
+        "path": "Service",
+        "children": {
+          "myALB": {
+            "id": "myALB",
+            "path": "Service/myALB",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Service/myALB/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "myALB",
+                    "scheme": "internet-facing",
+                    "securityGroups": [
+                      {
+                        "Fn::GetAtt": [
+                          "myALBSecurityGroupF245F258",
+                          "GroupId"
+                        ]
+                      }
+                    ],
+                    "subnets": [
+                      {
+                        "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet1Subnet9086CB81B549F97F"
+                      },
+                      {
+                        "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet2Subnet820C8D9D8CF3536F"
+                      }
+                    ],
+                    "type": "application"
+                  }
+                }
+              },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "Service/myALB/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Service/myALB/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Automatically created Security Group for ELB ServicemyALBB21F0F62",
+                        "securityGroupIngress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "ipProtocol": "tcp",
+                            "fromPort": 80,
+                            "toPort": 80,
+                            "description": "Internet access ALB 80"
+                          }
+                        ],
+                        "vpcId": {
+                          "Fn::ImportValue": "Network:ExportsOutputRefmyVPC0151299038646803"
+                        }
+                      }
+                    }
+                  },
+                  "to ServicemyASGInstanceSecurityGroup186BFF9F:80": {
+                    "id": "to ServicemyASGInstanceSecurityGroup186BFF9F:80",
+                    "path": "Service/myALB/SecurityGroup/to ServicemyASGInstanceSecurityGroup186BFF9F:80",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupEgress",
+                      "aws:cdk:cloudformation:props": {
+                        "groupId": {
+                          "Fn::GetAtt": [
+                            "myALBSecurityGroupF245F258",
+                            "GroupId"
+                          ]
+                        },
+                        "ipProtocol": "tcp",
+                        "description": "ALB access 80 port of EC2 in Autoscaling Group",
+                        "destinationSecurityGroupId": {
+                          "Fn::GetAtt": [
+                            "myASGInstanceSecurityGroup77B88BA5",
+                            "GroupId"
+                          ]
+                        },
+                        "fromPort": 80,
+                        "toPort": 80
+                      }
+                    }
+                  }
+                }
+              },
+              "my80": {
+                "id": "my80",
+                "path": "Service/myALB/my80",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Service/myALB/my80/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::Listener",
+                      "aws:cdk:cloudformation:props": {
+                        "defaultActions": [
+                          {
+                            "targetGroupArn": {
+                              "Ref": "myALBmy80addTargetGroupGroup1569733D"
+                            },
+                            "type": "forward"
+                          }
+                        ],
+                        "loadBalancerArn": {
+                          "Ref": "myALB18A49813"
+                        },
+                        "port": 80,
+                        "protocol": "HTTP"
+                      }
+                    }
+                  },
+                  "addTargetGroupGroup": {
+                    "id": "addTargetGroupGroup",
+                    "path": "Service/myALB/my80/addTargetGroupGroup",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Service/myALB/my80/addTargetGroupGroup/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+                          "aws:cdk:cloudformation:props": {
+                            "port": 80,
+                            "protocol": "HTTP",
+                            "targetType": "instance",
+                            "vpcId": {
+                              "Fn::ImportValue": "Network:ExportsOutputRefmyVPC0151299038646803"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "myASG": {
+            "id": "myASG",
+            "path": "Service/myASG",
+            "children": {
+              "InstanceSecurityGroup": {
+                "id": "InstanceSecurityGroup",
+                "path": "Service/myASG/InstanceSecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Service/myASG/InstanceSecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Service/myASG/InstanceSecurityGroup",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "securityGroupIngress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "ipProtocol": "tcp",
+                            "fromPort": 22,
+                            "toPort": 22,
+                            "description": "Access SSH port of EC2 in Autoscaling Instance"
+                          }
+                        ],
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Service/myASG"
+                          }
+                        ],
+                        "vpcId": {
+                          "Fn::ImportValue": "Network:ExportsOutputRefmyVPC0151299038646803"
+                        }
+                      }
+                    }
+                  },
+                  "from ServicemyALBSecurityGroupDC9A0C1C:80": {
+                    "id": "from ServicemyALBSecurityGroupDC9A0C1C:80",
+                    "path": "Service/myASG/InstanceSecurityGroup/from ServicemyALBSecurityGroupDC9A0C1C:80",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                      "aws:cdk:cloudformation:props": {
+                        "ipProtocol": "tcp",
+                        "description": "ALB access 80 port of EC2 in Autoscaling Group",
+                        "fromPort": 80,
+                        "groupId": {
+                          "Fn::GetAtt": [
+                            "myASGInstanceSecurityGroup77B88BA5",
+                            "GroupId"
+                          ]
+                        },
+                        "sourceSecurityGroupId": {
+                          "Fn::GetAtt": [
+                            "myALBSecurityGroupF245F258",
+                            "GroupId"
+                          ]
+                        },
+                        "toPort": 80
+                      }
+                    }
+                  }
+                }
+              },
+              "InstanceRole": {
+                "id": "InstanceRole",
+                "path": "Service/myASG/InstanceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Service/myASG/InstanceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Service/myASG"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "InstanceProfile": {
+                "id": "InstanceProfile",
+                "path": "Service/myASG/InstanceProfile",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::InstanceProfile",
+                  "aws:cdk:cloudformation:props": {
+                    "roles": [
+                      {
+                        "Ref": "myASGInstanceRole5AF7F92F"
+                      }
+                    ]
+                  }
+                }
+              },
+              "LaunchConfig": {
+                "id": "LaunchConfig",
+                "path": "Service/myASG/LaunchConfig",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AutoScaling::LaunchConfiguration",
+                  "aws:cdk:cloudformation:props": {
+                    "imageId": "ami-0bea7fd38fabe821a",
+                    "instanceType": "t2.micro",
+                    "iamInstanceProfile": {
+                      "Ref": "myASGInstanceProfile053766AB"
+                    },
+                    "keyName": "keypair",
+                    "securityGroups": [
+                      {
+                        "Fn::GetAtt": [
+                          "myASGInstanceSecurityGroup77B88BA5",
+                          "GroupId"
+                        ]
+                      }
+                    ],
+                    "userData": {
+                      "Fn::Base64": "#!/bin/bash\nsudo yum update -y\nsudo amazon-linux-extras install -y nginx1.12\nsudo systemctl start nginx"
+                    }
+                  }
+                }
+              },
+              "ASG": {
+                "id": "ASG",
+                "path": "Service/myASG/ASG",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AutoScaling::AutoScalingGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "maxSize": "2",
+                    "minSize": "1",
+                    "desiredCapacity": "1",
+                    "launchConfigurationName": {
+                      "Ref": "myASGLaunchConfigA0CD8C73"
+                    },
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "Service/myASG",
+                        "propagateAtLaunch": true
+                      }
+                    ],
+                    "targetGroupArns": [
+                      {
+                        "Ref": "myALBmy80addTargetGroupGroup1569733D"
+                      }
+                    ],
+                    "vpcZoneIdentifier": [
+                      {
+                        "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet1Subnet9086CB81B549F97F"
+                      },
+                      {
+                        "Fn::ImportValue": "Network:ExportsOutputRefmyVPCPublicSubnet2Subnet820C8D9D8CF3536F"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "OUTPUT_ALB_DNS": {
+            "id": "OUTPUT_ALB_DNS",
+            "path": "Service/OUTPUT_ALB_DNS"
+          }
+        }
+      }
+    }
+  }
+}
