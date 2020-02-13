@@ -48,7 +48,7 @@ pip3 --version
 
 
 
-### 5. Install CDK requirement
+### 5. Install Python Dependencies
 
 *Directory PATH = `~/environment/aws_cdk_basic_sample`*
 
